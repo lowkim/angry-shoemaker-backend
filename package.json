@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start-prod" : "NODE_ENV=production node keystone.js",
     "start": "nodemon keystone.js"
   },
   "author": "",
