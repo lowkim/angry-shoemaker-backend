@@ -14,5 +14,6 @@ exports = module.exports = function(app){
         app.get('/categories/:category/:subcategories', routes.api.subcategory.list)
         app.post('/charge', routes.api.charge.charge);
         app.get("/charge/:id", routes.api.charge.getChargeById);
+        app.get("/disabledDates", routes.api.disableddate.list);
 }
 

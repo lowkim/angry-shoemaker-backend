@@ -1,8 +1,6 @@
 const keystone = require('keystone');
 const Order = new keystone.List('Order');
 const Types = keystone.Field.Types;
-const mongoose = require("mongoose")
-const mongoType = keystone.mongoose.Types;
 Order.add({
     name:{type:String, noedit:true},
     total_amount:{type:Number, noedit:true},
