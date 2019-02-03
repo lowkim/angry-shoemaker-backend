@@ -11,10 +11,9 @@ Product.add({
   quantity: {type: Number},
   description: {type: Types.Html, wysiwyg: true, height: 300},
   image: {type: Types.CloudinaryImage},
-  addon: {type:Types.Select, options:'first, second, third'},
   subCategory: {type: Types.Relationship, ref: 'SubCategory'},
-  txtArray:{type:Types.TextArray}
+  sizes:{type: Types.Relationship, ref:'ProductSize', many:true}
 });
 
-Product.defaultColumns = 'title, image, addon';
+Product.defaultColumns = 'title, image';
 Product.register();

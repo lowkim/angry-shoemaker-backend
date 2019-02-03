@@ -36,7 +36,7 @@ exports.charge = (req, res) => {
     Address:req.body.address.street,
     postalCode:req.body.address.postalCode,
     unitNumber:req.body.address.unitNum,
-    order_date:'11-01-2020'
+    order_date:req.body.orderDate
 
   }
   const newOrder = new Order.model(newOrderInfo);
