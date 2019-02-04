@@ -10,7 +10,7 @@ exports.listIndv = (req, res) => {
         return res.send(err);
       } else {
         let lol = items.reduce((acc, cur) => {
-          acc[cur["_id"]] = { _id: cur["_id"], title: cur["title"], price:cur['price'], size:cur['sizes'],image:cur['image'] };
+          acc[cur["_id"]] = { _id: cur["_id"], title: cur["title"], price:cur['price'], size:cur['sizes'],image:cur['image'], description:cur['description']};
           return acc;
         }, {});
         return res.send(lol);
