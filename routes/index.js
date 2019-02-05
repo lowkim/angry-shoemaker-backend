@@ -16,5 +16,6 @@ exports = module.exports = function(app){
         app.post('/charge', routes.api.charge.charge);
         app.get("/charge/:id", routes.api.charge.getChargeById);
         app.get("/disabledDates", routes.api.disableddate.list);
+        app.get("/insta", routes.api.instagrampic.instaItems);
 }
 
