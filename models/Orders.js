@@ -11,6 +11,7 @@ Order.add({
     postalCode:{type:Number,noedit:true},
     unitNumber:{type:String,noedit:true},
     order_date:{type:Types.Date,noedit:true},
+    order_time:{type:String, noedit:true}
 })
 
 

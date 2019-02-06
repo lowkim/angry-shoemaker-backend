@@ -10,7 +10,6 @@ exports.listIndv = (req, res) => {
     if(err){
       return res.send(err)
     }else{
-      console.log(items)
       return res.send(items)
     }
   })
