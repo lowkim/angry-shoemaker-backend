@@ -7,12 +7,11 @@ sgMail.setApiKey(
 );
 
 exports.charge = (req, res) => {
-  
   let orderItems = "Item    Quantity\n";
   req.body.cartInfo.forEach(x => {
     orderItems += `${x.title}   x(${x.qty})\n`;
   });
-  
+
   // Create the charge object with data from the Vue.js client
   var newCharge = {
     amount: req.body.total * 100,
@@ -30,9 +29,9 @@ exports.charge = (req, res) => {
         country: "Singapore"
       }
     },
-    metadata: { 
+    metadata: {
       time: req.body.orderTime,
-      order_Items:orderItems
+      order_Items: orderItems
     }
   };
 
@@ -78,20 +77,28 @@ exports.getChargeById = function(req, res) {
         res.json({ error: err, theCharge: false });
       } else {
         const msg = {
-          to: `${theCharge.receipt_email}`,
-          from: "shunyuan693@gmail.com",
-          template_id: "d-d4b2e5a99fc44104860214bf7c302b7b",
-          dynamic_template_data: {
-            name: `${theCharge.shipping.name}`,
-            time: `${theCharge.metadata.time}`,
-            item: `${theCharge.metadata['order_Items']}`,
-            block: `${theCharge.shipping.address.line1}`,
-            unitNum:`${theCharge.shipping.address.line2}`,
-            phone:`${theCharge.shipping.phone}`
-          },
-          subject: "Order Confirmation"
+          "personalizations": [
+            {
+              "to": [{ 
+                  "email": `${theCharge.receipt_email}` 
+                },{
+                  "email":"shunyuan693@gmail.com"
+                }],
+              "dynamic_template_data": {
+                "name": `${theCharge.shipping.name}`,
+                "time": `${theCharge.metadata.time}`,
+                "item": `${theCharge.metadata["order_Items"]}`,
+                "block": `${theCharge.shipping.address.line1}`,
+                "unitNum": `${theCharge.shipping.address.line2}`,
+                "phone": `${theCharge.shipping.phone}`,
+                "subject": `Order Number: ${theCharge.created}`
+              },
+            }
+          ],
+          "from": "shunyuan693@gmail.com",
+          "template_id": "d-d4b2e5a99fc44104860214bf7c302b7b",
         };
-        sgMail.send(msg).catch(err => console.error(err.response.body.errors))
+        sgMail.send(msg).catch(err => console.error(err.response.body.errors));
         res.json({ error: false, charge: theCharge });
       }
     } catch {
