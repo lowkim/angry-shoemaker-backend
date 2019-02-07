@@ -31,30 +31,10 @@ exports.charge = (req, res) => {
     },
     metadata: {
       time: req.body.orderTime,
-      order_Items: orderItems
+      order_Items: orderItems,
+      orderDate:req.body.orderDate,
     }
   };
-
-  let newOrderInfo = {
-    name: req.body.name,
-    total_amount: req.body.total,
-    order_item: orderItems,
-    email: req.body.email,
-    phoneNumber: req.body.phone,
-    Address: req.body.address.street,
-    postalCode: req.body.address.postalCode,
-    unitNumber: req.body.address.unitNum,
-    order_date: req.body.orderDate,
-    order_time: req.body.orderTime
-  };
-  const newOrder = new Order.model(newOrderInfo);
-  Order.updateItem(newOrder, { ignoreNoEdit: true }, error => {
-    res.locals.enquirySubmitted = true;
-    if (error) {
-      res.locals.saveError = true;
-      console.log(error);
-    }
-  });
 
   // Call the stripe objects helper functions to trigger a new charge
   stripe.charges.create(newCharge, function(err, charge) {
@@ -76,27 +56,53 @@ exports.getChargeById = function(req, res) {
       if (err) {
         res.json({ error: err, theCharge: false });
       } else {
+        let newOrderInfo = {
+          order_id: theCharge.created,
+          name: theCharge.shipping.name,
+          total_amount: theCharge.amount / 100, 
+          order_item: theCharge.metadata.order_Items,
+          email: theCharge.receipt_email,
+          phoneNumber: theCharge.shipping.phone,
+          Address: theCharge.shipping.address.line1,
+          postalCode:theCharge.shipping.address.postal_code,
+          unitNumber: theCharge.shipping.address.line2,
+          order_date: theCharge.metadata.orderDate,
+          order_time: theCharge.metadata.time,
+          order_status:"processing"
+        };
+        const newOrder = new Order.model(newOrderInfo);
+        Order.updateItem(newOrder, { ignoreNoEdit: true }, error => {
+          res.locals.enquirySubmitted = true;
+          if (error) {
+            res.locals.saveError = true;
+            console.log(error);
+          }
+        });
+
         const msg = {
-          "personalizations": [
+          personalizations: [
             {
-              "to": [{ 
-                  "email": `${theCharge.receipt_email}` 
-                },{
-                  "email":"shunyuan693@gmail.com"
-                }],
-              "dynamic_template_data": {
-                "name": `${theCharge.shipping.name}`,
-                "time": `${theCharge.metadata.time}`,
-                "item": `${theCharge.metadata["order_Items"]}`,
-                "block": `${theCharge.shipping.address.line1}`,
-                "unitNum": `${theCharge.shipping.address.line2}`,
-                "phone": `${theCharge.shipping.phone}`,
-                "subject": `Order Number: ${theCharge.created}`
-              },
+              to: [
+                {
+                  email: `${theCharge.receipt_email}`
+                },
+                {
+                  email: "shunyuan693@gmail.com"
+                }
+              ],
+              dynamic_template_data: {
+                name: `${theCharge.shipping.name}`,
+                time: `${theCharge.metadata.time}`,
+                item: `${theCharge.metadata["order_Items"]}`,
+                block: `${theCharge.shipping.address.line1}`,
+                unitNum: `${theCharge.shipping.address.line2}`,
+                phone: `${theCharge.shipping.phone}`,
+                subject: `Order Number: ${theCharge.created}`
+              }
             }
           ],
-          "from": "shunyuan693@gmail.com",
-          "template_id": "d-d4b2e5a99fc44104860214bf7c302b7b",
+          from: "shunyuan693@gmail.com",
+          template_id: "d-d4b2e5a99fc44104860214bf7c302b7b"
         };
         sgMail.send(msg).catch(err => console.error(err.response.body.errors));
         res.json({ error: false, charge: theCharge });
