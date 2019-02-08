@@ -3,7 +3,7 @@ const keystone = require("keystone");
 const Order = keystone.list("Order");
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(
-  "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"
+  process.env.SENDGRIDKEY
 );
 
 exports.charge = (req, res) => {
@@ -107,7 +107,8 @@ exports.getChargeById = function(req, res) {
         sgMail.send(msg).catch(err => console.error(err.response.body.errors));
         res.json({ error: false, charge: theCharge });
       }
-    } catch {
+    } 
+    catch(error) {
       console.log(error);
     }
   });
