@@ -87,7 +87,7 @@ exports.getChargeById = function(req, res) {
                   email: `${theCharge.receipt_email}`
                 },
                 {
-                  email: "shunyuan693@gmail.com"
+                  email: "elves@thehappyelves.com"
                 }
               ],
               dynamic_template_data: {
@@ -101,8 +101,8 @@ exports.getChargeById = function(req, res) {
               }
             }
           ],
-          from: "shunyuan693@gmail.com",
-          template_id: "d-d4b2e5a99fc44104860214bf7c302b7b"
+          from: "elves@thehappyelves.com",
+          template_id: "d-828f1ad3ac814e36aff5b32509069d09"
         };
         sgMail.send(msg).catch(err => console.error(err.response.body.errors));
         res.json({ error: false, charge: theCharge });
