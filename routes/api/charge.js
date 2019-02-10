@@ -79,32 +79,32 @@ exports.getChargeById = function(req, res) {
           }
         });
 
-        const msg = {
-          personalizations: [
-            {
-              to: [
-                {
-                  email: `${theCharge.receipt_email}`
-                },
-                {
-                  email: "elves@thehappyelves.com"
-                }
-              ],
-              dynamic_template_data: {
-                name: `${theCharge.shipping.name}`,
-                time: `${theCharge.metadata.time}`,
-                item: `${theCharge.metadata["order_Items"]}`,
-                block: `${theCharge.shipping.address.line1}`,
-                unitNum: `${theCharge.shipping.address.line2}`,
-                phone: `${theCharge.shipping.phone}`,
-                subject: `Order Number: ${theCharge.created}`
-              }
-            }
-          ],
-          from: "elves@thehappyelves.com",
-          template_id: "d-828f1ad3ac814e36aff5b32509069d09"
-        };
-        sgMail.send(msg).catch(err => console.error(err.response.body.errors));
+        // const msg = {
+        //   personalizations: [
+        //     {
+        //       to: [
+        //         {
+        //           email: `${theCharge.receipt_email}`
+        //         },
+        //         {
+        //           email: "elves@thehappyelves.com"
+        //         }
+        //       ],
+        //       dynamic_template_data: {
+        //         name: `${theCharge.shipping.name}`,
+        //         time: `${theCharge.metadata.time}`,
+        //         item: `${theCharge.metadata["order_Items"]}`,
+        //         block: `${theCharge.shipping.address.line1}`,
+        //         unitNum: `${theCharge.shipping.address.line2}`,
+        //         phone: `${theCharge.shipping.phone}`,
+        //         subject: `Order Number: ${theCharge.created}`
+        //       }
+        //     }
+        //   ],
+        //   from: "elves@thehappyelves.com",
+        //   template_id: "d-828f1ad3ac814e36aff5b32509069d09"
+        // };
+        // sgMail.send(msg).catch(err => console.error(err.response.body.errors));
         res.json({ error: false, charge: theCharge });
       }
     } 
