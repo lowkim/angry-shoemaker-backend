@@ -5,7 +5,8 @@ const Types = keystone.Field.Types;
 PromotionImages.add({
     name:{type: String, requried:true, iniitial: true},
     image:{type:Types.CloudinaryImage},
-    description:{type:Types.Html, wysiwyg:true, height: 300}
+    description:{type:Types.Html, wysiwyg:true, height: 300},
+    subCategory: {type: Types.Relationship, ref: 'SubCategory'},
 })
 
 PromotionImages.register();

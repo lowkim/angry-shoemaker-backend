@@ -5,7 +5,6 @@ const Product = keystone.list("Product")
 exports.list = (req, res) =>{
     SubCategory.model.findOne({name:req.params.subcategories},(err, subcat) => {
         if(err){
-            console.log("memem")
             return res.send(err);
         }else{
             Product.model.find({subCategory:subcat._id}, (err, prods)=>{
