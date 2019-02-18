@@ -10,7 +10,7 @@ Product.add({
   price: {type: Number},
   quantity: {type: Number},
   description: {type: Types.Html, wysiwyg: true, height: 300},
-  image: {type: Types.CloudinaryImage},
+  image: {type: Types.CloudinaryImages},
   subCategory: {type: Types.Relationship, ref: 'SubCategory'},
   sizes:{type: Types.Relationship, ref:'ProductSize', many:true}
 });
